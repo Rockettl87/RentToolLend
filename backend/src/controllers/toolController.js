@@ -138,7 +138,7 @@ const createTool = async (req, res) => {
       safetyNotes, tags
     } = req.body;
 
-    if (!lat || !lng) {
+    if (lat == null || lng == null) {
       return res.status(400).json({ success: false, message: 'Location coordinates are required' });
     }
 

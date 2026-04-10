@@ -136,7 +136,9 @@ export default function ListToolPage() {
     setSubmitting(true)
     try {
       // Use user location coordinates if available
-      const coordinates = user?.location?.coordinates || [-98.35, 39.5]
+      const userCoords = user?.location?.coordinates
+      const coordinates = (userCoords && (userCoords[0] !== 0 || userCoords[1] !== 0)) ? userCoords : [-98.35, 39.5]
+      const [lng, lat] = coordinates
       const { data } = await api.post('/tools', {
         title: form.title,
         description: form.description,
@@ -149,13 +151,12 @@ export default function ListToolPage() {
         depositAmount: Number(form.depositAmount),
         minRentalDays: Number(form.minRentalDays),
         maxRentalDays: Number(form.maxRentalDays),
-        location: {
-          coordinates,
-          address: form.address,
-          city: form.city,
-          state: form.state,
-          zip: form.zip,
-        },
+        lat,
+        lng,
+        address: form.address,
+        city: form.city,
+        state: form.state,
+        zip: form.zip,
         deliveryOptions: {
           pickup: form.deliveryPickup,
           delivery: form.deliveryDelivery,
